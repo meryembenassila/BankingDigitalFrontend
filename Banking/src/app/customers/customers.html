@@ -1,0 +1,54 @@
+<div class="container mt-3 ">
+  <div class="card">
+    @if(errorMessage){
+      <div class="text-bg-danger">{{errorMessage|json}}</div>
+    }
+
+    <div class="card-header">
+      Customers
+    </div>
+    <div class="card-body">
+      @if(customers && customers.length > 0 ) {<!--ne fait pas if customers-->
+
+      {{this.formGroupCustomers.value|json}}
+
+      <form [formGroup]="formGroupCustomers" (ngSubmit)="handeleSearchCustomers()">
+        <div class="input-group" >
+          <label class="input-group-text" for="search">Keyword</label>
+          <input type="text" formControlName="keyword" class="form-control" id="search"  placeholder="Search ">
+          <button class="btn btn-primary" type="submit">Search</button>
+        </div>
+      </form>
+
+      <table class=" table table-hover">
+        <thead>
+        <tr>
+          <th>ID</th>
+          <th>Name</th>
+          <th>Email</th>
+          <th>Actions</th>
+        </tr>
+        </thead>
+
+          <tbody>
+            @for (customer of customers; track customer.id ){
+              <tr>
+                <td>{{customer.id}}</td>
+                <td>{{customer.name}}</td>
+                <td>{{customer.email}}</td>
+                <td><button (click)="handleDelete(customer.id)" class="btn btn-danger">Delete </button></td>
+              </tr>
+            }
+
+
+          </tbody>
+
+
+
+      </table>
+      }
+    </div>
+
+  </div>
+
+</div>
