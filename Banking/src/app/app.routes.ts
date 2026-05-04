@@ -6,18 +6,27 @@ import { Login } from './login/login';
 import { AdminTemplate } from './admin-template/admin-template';
 import { Authentification } from './services/authentification';
 import { authentificationGuard } from './guards/authentification-guard';
+import { NotAuthorized } from './not-authorized/not-authorized';
+import { authorizationGuard } from './guards/authorization-guard';
 
 export const routes: Routes = [
   {
     path: 'admin',
-    component: AdminTemplate,canActivate :[authentificationGuard],//ici on active guard d'authentification (tous ces routes necessite de passé par le login )
+    component: AdminTemplate,
+    canActivate: [authentificationGuard], //ici on active guard d'authentification (tous ces routes necessite de passé par le login )
     children: [
       //des routes imbriquées (sous-routes) à l’intérieur d’une route principale.
       //cad :
       // /admin/Customers  /admin/Accounts  /admin/NewCustomer
       { path: 'customers', component: Customers },
       { path: 'accounts', component: Accounts },
-      { path: 'new-customer', component: NewCustomer },
+      {
+        path: 'new-customer',
+        component: NewCustomer,
+        canActivate: [authorizationGuard], //proteger la route avec ce guards
+        data: { role: 'ADMIN' },
+      },
+      { path: 'not-authorized', component: NotAuthorized },
     ],
   },
 

@@ -1,6 +1,7 @@
 import { HttpInterceptorFn } from '@angular/common/http';
 import { inject } from '@angular/core';
 import { Authentification } from '../services/authentification';
+import { catchError, throwError } from 'rxjs';
 
 
 //!!!pour que l'intercepteur fonctionne cad tous les requetes passe par lui il faut le declarrer dans app.config.ts ==>voir
@@ -15,7 +16,7 @@ export const appHttpInterceptor: HttpInterceptorFn = (req, next) => {
 
   // on doit pas ajouter le tocken dans l'url de login car c'est elle qui donne jwt
   if (!req.url.includes('/auth/login')) {
-    const token = authService.accessToken;//tocken de service qui nous la donner apres login
+    const token = authService.accessToken; //tocken de service qui nous la donner apres login
 
     const clonedReq = req.clone({
       setHeaders: {
@@ -23,9 +24,20 @@ export const appHttpInterceptor: HttpInterceptorFn = (req, next) => {
       },
     });
 
-    return next(clonedReq);
+    //return next(clonedReq);//avant d'utilser localstorage
+
+    return next(clonedReq).pipe(//si la requete deja contient un erreur cad en travaillons son tocken a expire
+      catchError((err) => {
+        //  si token expiré ou invalide
+        if (err.status === 401) {
+          authService.logout(); //
+        }
+
+        return throwError(() => err);
+      }),
+    );
   }
 
-  //  requête login sans token
+  //  login sans token
   return next(req);
 };

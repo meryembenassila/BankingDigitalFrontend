@@ -10,7 +10,7 @@
     <div class="card-body">
       @if(customers && customers.length > 0 ) {<!--ne fait pas if customers-->
 
-      {{this.formGroupCustomers.value|json}}
+
 
       <form [formGroup]="formGroupCustomers" (ngSubmit)="handeleSearchCustomers()">
         <div class="input-group" >

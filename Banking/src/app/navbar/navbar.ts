@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
+import { Authentification } from '../services/authentification';
 
 @Component({
   selector: 'app-navbar',
@@ -7,4 +8,14 @@ import { RouterLink } from '@angular/router';
   templateUrl: './navbar.html',
   styleUrl: './navbar.css',
 })
-export class Navbar {}
+export class Navbar {
+  constructor(public authService: Authentification,private router :Router) {}//on a fait le service authentifiaction public pour qu'il soit accessible dans html de nav
+
+  ngOnInit() {}
+
+  handelogout() {
+    this.authService.logout();//pour laisser tiut de l'authentification dans son service
+
+
+  }
+}

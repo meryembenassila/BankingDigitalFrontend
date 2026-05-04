@@ -20,7 +20,10 @@
           </a>
           <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
             <li><a class="dropdown-item" routerLink="/admin/customers">Search Customers</a></li>
-            <li><a class="dropdown-item" routerLink="/admin/new-customer">New Customers</a></li>
+            @if (authService.roles.includes('ADMIN')){
+              <li><a class="dropdown-item" routerLink="/admin/new-customer">New Customers</a></li>
+            }
+
             <li><hr class="dropdown-divider"></li>
             <li><a class="dropdown-item" href="#">Something else here</a></li>
           </ul>
@@ -30,14 +33,19 @@
         </li>
       </ul>
        <ul class="navbar">
-         <li>
-           [username]
-         </li>
-         <li>
-           <button class="btn btn-success">Logout</button>
-         </li>
+         @if (authService.isAuthenticated) {
+           <li class="nav-item">
+            <span class="text-white ">
+              {{ authService.username }}
+            </span>
+           </li>
+         }
+           <li>
+             <button (click)="handelogout()" class="btn btn-success">Logout</button>
+           </li>
 
        </ul>
+
     </div>
   </div>
 </nav>
